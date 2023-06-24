@@ -1,1 +1,1 @@
-Eloquen Javascript Excersices
+Eloquent Javascript Exercises
