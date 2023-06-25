@@ -77,7 +77,51 @@ function sum(arr) {
 /* ==================
          OPTIONAL 
    ================== */
-function range(start, end, step = 1) {
-   let length = end - start + 1;
-   return [...Array(length).keys()].map((i) => start + step);
+// mine
+function rangeN(start, end, step = 1) {
+   let i = start;
+   let arr = [];
+   if (end > start) {
+      do {
+         arr.push(i);
+         i += step;
+      } while (i <= end);
+   } else {
+      do {
+         arr.push(i);
+         i += step;
+      } while (i >= end);
+   }
+
+   return arr;
+}
+
+// chatGPT refactor
+function rangeN(start, end, step = 1) {
+   let i = start;
+   let arr = [];
+   if (start < end) {
+      for (let i = start; i <= end; i += step) {
+         arr.push(i);
+      }
+   } else {
+      for (let i = start; i >= end; i += step) {
+         arr.push(i);
+      }
+   }
+
+   return arr;
+}
+
+// chatGPT refactor again
+function rangeN(start, end, step = 1) {
+   const arr = [];
+
+   const compare = start <= end ? (a, b) => a <= b : (a, b) => a >= b;
+
+   for (let i = start; compare(i, end); i += step) {
+      arr.push(i);
+   }
+
+   return arr;
 }
