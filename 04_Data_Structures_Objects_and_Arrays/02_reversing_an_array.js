@@ -24,3 +24,9 @@ function reverseInPlace(arr) {
       arr[i] = tmp.at(-1 - i);
    }
 }
+
+/*
+The function that keeps the original array intact is more useful since
+doesn't have an effect in the code in the same environment, hence you could
+say that is a pure function, with it side effect being generating a new array.
+*/
