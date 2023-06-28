@@ -79,6 +79,7 @@ function arrayToList(arr) {
 /* ==============
         PART B
    ============== */
+// listToArray function
 function ListToArray (list) {
    const arr = []
    while(list){
@@ -87,3 +88,36 @@ function ListToArray (list) {
    }
    return arr
 }
+
+//prepend function
+function prepend(element, list) {
+   return Object.assign(element, {...list})
+}
+
+// nth function
+function nth(list,number){
+   for(let i = 0; i<=number;i++){
+      if(!list) return undefined
+      list = list.rest
+   }
+   return list.value
+}
+
+// nth recursive
+function nth(list,number){
+   if (number === 0){
+      if(!list) return undefined
+      else return list.value
+   }  
+   return nth(list.rest,number-1)
+}
+
+
+// chatGPT listToArray function
+function listToArray (list) {
+   if (list === null){
+      return []
+   }
+   return [list.value].concat(listToArray.(list.rest))
+}
+
