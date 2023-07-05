@@ -1,3 +1,6 @@
+/***************
+   MEADOWFIELD
+****************/
 const roads = [
    "Alice's House-Bob's House",
    "Alice's House-Cabin",
@@ -15,6 +18,8 @@ const roads = [
    "Shop-Town Hall",
 ];
 
+// Creates a map object that stores an array of connected
+// nodes.
 function buildGraph(edges) {
    let graph = Object.create(null);
    function addEdge(from, to) {
@@ -33,6 +38,12 @@ function buildGraph(edges) {
 
 const roadGraph = buildGraph(roads);
 
+
+/***************
+   THE TASK
+****************/
+// Condensed village's state down to the minimal
+// set of values that define it
 class VillageState {
    constructor(place, parcels) {
       this.place = place;
@@ -54,6 +65,10 @@ class VillageState {
    }
 }
 
+
+/***************
+   SIMULATION
+****************/
 function runRobot(state, robot, memory) {
    for (let turn = 0; ; turn++) {
       if (state.parcels.length === 0) {
@@ -65,4 +80,64 @@ function runRobot(state, robot, memory) {
       memory = action.memory;
       console.log(`Moved to ${action.direction}`);
    }
+}
+
+// dumbest strategy
+function randomPick(array) {
+   let choice = Math.floor(Math.random() * array.length)
+   return array[choice]
+}
+function randomRobot (state) {
+   return {direction:randomPick(roadGraph[state.place])}
+}
+
+VillageState.random = function(parcelCount = 5){
+   let parcels = []
+   for(let i = 0; i < parcelCount; i++){
+      let address = randomPick(Object.keys(roadGraph))
+      let place
+      do {
+         place = randomPick(Object.keys(roadGraph))
+      }  while (place == address)
+      parcels.push({place, address})
+   }
+   return new VillageState("Post Office", parcels)
+}
+
+/**************************
+   THE MAIL TRUCK'S ROUTE
+***************************/
+function routeRobot(state, memory){
+   if(memory.length == 0) {
+      memory = mailRoute
+   }
+   return {direction: memory[0], memory: memory.slice(1)}
+}
+
+/***************
+   PATHFINDING
+****************/
+function findRoute(graph, from, to){
+   let work = [{at: from, route: []}]
+   for(let i = 0; i < work.length; i++) {
+      let {at, route} = work[i]
+      for(let place of graph[at]){
+         if (place == to) return route.concat(place)
+         if (!work.some(w => w.at === place)) {
+            work.push({at: place, route: route.concat(place)})
+         }
+      }
+   }
+}
+
+function goalOrientedRobot({place, parcels}, route) {
+   if (route.length == 0) {
+      let parcel = parcels[0]
+      if( parcel.place !== place) {
+         route = findRoute(roadGraph, place,parcel.place)
+      } else {
+         route = findRoute(roadGraph, place, parcel.address)
+      }
+   }
+   return {direction: route[0], memory: route.slice(1)}
 }
