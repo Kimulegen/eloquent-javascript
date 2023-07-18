@@ -6,3 +6,5 @@
    * front of or after the dot, but the number cannot be a dot alone. Tha is, `.5` and
    * `5.` are vbalid JavaScript numbers, but a lone dot *isn't*
 */
+
+const re = /^[+\-](\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?$/
